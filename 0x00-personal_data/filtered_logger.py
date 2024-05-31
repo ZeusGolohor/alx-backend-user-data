@@ -20,22 +20,6 @@ def filter_datum(fields: List[str], redaction: str,
         return (result)
 
 
-def get_logger():
-    """
-    A get_logger function that takes no arguments
-    and returns a logging.Logger object.
-    """
-    logger = logging.getLogger("user_data")
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-
-    fmt = RedactingFormatter(fields=PII_FIELDS)
-    stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(fmt)
-    logger.addHandler(stream_handler)
-    return (logger)
-
-
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class """
 
@@ -48,11 +32,6 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        """
-        A method to filter values in incoming log records
-        using filter_datum. Values for fields in fields
-        should be filtered.
-        """
-        record.msg = filter_datum(self.fields, self.REDACTION,
-                                  record.getMessage(), self.SEPARATOR)
-        return super(RedactingFormatter, self).format(record)
+        message = super().format(record)
+        return filter_datum(self.fields, self.REDACTION,
+                            message, self.SEPARATOR)
