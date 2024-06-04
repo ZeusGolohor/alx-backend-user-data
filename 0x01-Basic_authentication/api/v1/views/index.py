@@ -32,3 +32,11 @@ def unauthorized() -> str:
     A method to user 401 error handler.
     """
     abort(401)
+
+
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def forbidden() -> str:
+    """
+    A methid to had /forbidden errors.
+    """
+    abort(403)
