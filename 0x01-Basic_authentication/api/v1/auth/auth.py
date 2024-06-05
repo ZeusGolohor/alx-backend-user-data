@@ -31,10 +31,15 @@ class Auth:
         """
         Use to determine authentication header.
         """
-        return None
+        if request is None:
+            return None
+        header = request.headers.get('Authorization')
+        if header is None:
+            return None
+        return header
 
     def current_user(self, request=None) -> TypeVar('User'):
         """"
         Use to return the current user.
         """
-        return (None)
+        return None
