@@ -4,6 +4,7 @@ A module to handle authentication.
 """
 from typing import List, TypeVar
 from flask import request
+import os
 
 
 class Auth:
@@ -43,3 +44,12 @@ class Auth:
         Use to return the current user.
         """
         return None
+
+    def session_cookie(self, request=None):
+        """
+        A method used to return a cookie value.
+        """
+        if request is None:
+            return (None)
+        SESSION_NAME = os.getenv("SESSION_NAME")
+        return (request.cookies.get(SESSION_NAME))
