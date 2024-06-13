@@ -21,4 +21,15 @@ class User(Base):
     session_id = Column(String(250))
     reset_token = Column(String(250))
 
-
+    def __init__(self, *args, **kwargs):
+        """
+        A method used to initial the user class.
+        """
+        if kwargs:
+            for key, value in kwargs.items():
+                if key != "__class__":
+                    setattr(self, key, value)
+        else:
+            self.id = id = str(uuid.uuid4())
+            self.email = args[0]
+            self.hashed_password = args[1]
