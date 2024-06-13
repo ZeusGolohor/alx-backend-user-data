@@ -5,6 +5,7 @@ for a database table named users.
 """
 from sqlalchemy import Column, String
 from sqlalchemy.ext.declarative import declarative_base
+import uuid
 
 Base = declarative_base()
 
@@ -19,3 +20,16 @@ class User(Base):
     hashed_password = Column(String(128), nullable=False)
     session_id = Column(String(128))
     reset_token = Column(String(128))
+
+    def __init__(self, *args, **kwargs):
+        """
+        A method used to initial the user class.
+        """
+        if kwargs:
+            for key, value in kwargs.items():
+                if key != "__class__":
+                    setattr(self, key, value)
+        else:
+            self.id = id = str(uuid.uuid4())
+            self.email = args[0]
+            self.hashed_password = args[1]
