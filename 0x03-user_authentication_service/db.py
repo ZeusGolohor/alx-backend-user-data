@@ -62,11 +62,11 @@ class DB:
                     return user
         raise NoResultFound()
 
-    def update_user(self, id: int, **kwargs) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """
         A method used to update a user.
         """
-        user = self.find_user_by(id=id)
+        user = self.find_user_by(id=user_id)
         for key, value in kwargs.items():
             if hasattr(user, key):
                 setattr(user, key, value)
