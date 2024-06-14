@@ -49,7 +49,9 @@ def login():
         user = AUTH._db.find_user_by(email=email)
         args = {'session_id': new_session}
         AUTH._db.update_user(user.id, **args)
-        return jsonify({"email": "{}".format(email), "message": "logged in"})
+        res = jsonify({"email": "{}".format(email), "message": "logged in"})
+        res.set_cookie("session_id", new_session)
+        return res
     else:
         abort(401)
 
