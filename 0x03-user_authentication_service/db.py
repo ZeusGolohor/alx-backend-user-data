@@ -67,7 +67,12 @@ class DB:
         A method used to update a user.
         """
         user = self.find_user_by(id=id)
-        allowed_keys = ['email', 'hashed_password', 'session_id', 'reset_token']
+        allowed_keys = [
+                        'email',
+                        'hashed_password',
+                        'session_id',
+                        'reset_token'
+                       ]
         for key, value in kwargs.items():
             if key not in allowed_keys:
                 raise ValueError()
