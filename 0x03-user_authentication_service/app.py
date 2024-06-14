@@ -56,5 +56,23 @@ def login():
         abort(401)
 
 
+@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+def logout():
+    """
+    A method to logout a user.
+    """
+    session_id = request.form.get('session_id')
+    if (session_id is None):
+        abort(403)
+    user = AUTH.get_user_from_user_id(session_id)
+    if (user is None):
+        abort(403)
+    if user:
+        AUTH.destroy_session(user.id)
+    res = jsonify({})
+    res.set_cookie('session_id', '', expires=0)
+    return redirect(url_for('index'))
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
