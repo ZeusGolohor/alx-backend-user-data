@@ -2,7 +2,7 @@
 """
 A script to handle application routes.
 """
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -35,6 +35,23 @@ def users():
             return jsonify({
                             "email": "{}".format(email),
                             "message": "user created"})
+
+
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
+def login():
+    """
+    A method to log user into the app.
+    """
+    email = request.form.get('email')
+    password = request.form.get('password')
+    if (AUTH.valid_login(email, password)):
+        new_session = AUTH.create_session(email)
+        user = AUTH._db.find_user_by(email=email)
+        args = {'session_id': new_session}
+        AUTH._db.update_user(user.id, **args)
+        return jsonify({"email": "{}".format(email), "message": "logged in"})
+    else:
+        abort(401)
 
 
 if __name__ == "__main__":
