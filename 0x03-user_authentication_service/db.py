@@ -49,7 +49,7 @@ class DB:
         keys = list(kwargs)
         first_key = keys[0]
         first_value = kwargs[first_key]
-        if first_key not in ['email', 'id']:
+        if first_key not in ['email', 'id', 'session_id']:
             raise InvalidRequestError()
         all_users = self._session.query(User).all()
         if first_key == 'email':
@@ -59,6 +59,10 @@ class DB:
         elif first_key == 'id':
             for user in all_users:
                 if first_value == user.id:
+                    return user
+        elif first_key == 'session_id':
+            for user in all_users:
+                if first_value == user.session_id:
                     return user
         raise NoResultFound()
 
