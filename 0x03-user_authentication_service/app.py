@@ -74,5 +74,23 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/profile', methods=['GET'], strict_slashes=False)
+def profile():
+    """
+    A method to get and verify a user by session_id.
+    """
+    session_id = request.cookies.get('session_id')
+    if (session_id is None):
+        abort(403)
+    try:
+        args = {'session_id': session_id}
+        user = AUTH._db.find_user_by(**args)
+        if (user):
+            return jsonify({"email": "{}".format(user.email)}), 200
+        abort(403)
+    except NoResultFound:
+        abort(403)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
