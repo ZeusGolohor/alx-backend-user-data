@@ -8,6 +8,8 @@ from sqlalchemy.orm.session import Session
 
 from user import Base
 from user import User
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 
 class DB:
@@ -39,3 +41,18 @@ class DB:
         self._session.add(user)
         self._session.commit()
         return (user)
+
+    def find_user_by(self, **kwargs) -> User:
+        """
+        A method to find a user based on a filter.
+        """
+        keys = list(kwargs)
+        first_key = keys[0]
+        first_value = kwargs[first_key]
+        if first_key not in ['email']:
+            raise InvalidRequestError()
+        all_users = self._session.query(User).all()
+        for user in all_users:
+            if first_value == user.email:
+                return user
+        raise NoResultFound()
