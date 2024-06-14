@@ -2,7 +2,7 @@
 """
 A script to handle application routes.
 """
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, url_for, redirect
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -93,4 +93,4 @@ def profile():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000")
+    app.run(host="0.0.0.0", port="5000", debug=True)
