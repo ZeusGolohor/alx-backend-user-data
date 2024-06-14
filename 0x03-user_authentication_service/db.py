@@ -67,16 +67,10 @@ class DB:
         A method used to update a user.
         """
         user = self.find_user_by(id=id)
-        allowed_keys = [
-                        'email',
-                        'hashed_password',
-                        'session_id',
-                        'reset_token'
-                       ]
         for key, value in kwargs.items():
-            if key not in allowed_keys:
-                raise ValueError()
-            else:
+            if hasattr(user, key):
                 setattr(user, key, value)
+            else:
+                raise ValueError()
         self._session.add(user)
         self._session.commit()
