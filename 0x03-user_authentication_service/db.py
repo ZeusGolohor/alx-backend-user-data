@@ -49,10 +49,29 @@ class DB:
         keys = list(kwargs)
         first_key = keys[0]
         first_value = kwargs[first_key]
-        if first_key not in ['email']:
+        if first_key not in ['email', 'id']:
             raise InvalidRequestError()
         all_users = self._session.query(User).all()
-        for user in all_users:
-            if first_value == user.email:
-                return user
+        if first_key == 'email':
+            for user in all_users:
+                if first_value == user.email:
+                    return user
+        elif first_key == 'id':
+            for user in all_users:
+                if first_value == user.id:
+                    return user
         raise NoResultFound()
+
+    def update_user(self, id: int, **kwargs) -> None:
+        """
+        A method used to update a user.
+        """
+        user = self.find_user_by(id=id)
+        allowed_keys = ['email', 'hashed_password', 'session_id', 'reset_token']
+        for key, value in kwargs.items():
+            if key not in allowed_keys:
+                raise ValueError()
+            else:
+                setattr(user, key, value)
+        self._session.add(user)
+        self._session.commit()
